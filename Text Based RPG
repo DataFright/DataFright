@@ -1,0 +1,1757 @@
+import time
+import pygame
+import random
+
+
+pygame.mixer.init(44100, -16, 2, 2048)
+
+intro_song = pygame.mixer.Sound('03 Start of the Journey.wav')
+intro_song.set_volume(0.35)
+
+failure_song = pygame.mixer.Sound('49 Grief.wav')
+failure_song.set_volume(0.35)
+
+transition_song = pygame.mixer.Sound("05 Light Slumber.wav")
+transition_song.set_volume(0.35)
+
+town_music = pygame.mixer.Sound("04 Town.wav")
+town_music.set_volume(0.35)
+
+tavern_music = pygame.mixer.Sound("20 Capsule Monster.wav")
+tavern_music.set_volume(0.35)
+
+battle_music_one = pygame.mixer.Sound("08 Battle #1.wav")
+battle_music_one.set_volume(0.35)
+
+battle_music_two = pygame.mixer.Sound("16 Battle #2.wav")
+battle_music_two.set_volume(0.35)
+
+battle_music_three = pygame.mixer.Sound("48 Battle #3.wav")
+battle_music_three.set_volume(0.35)
+
+battle_music_victory = pygame.mixer.Sound("09 Triumph.wav")
+battle_music_victory.set_volume(0.35)
+
+sad_music = pygame.mixer.Sound("26 Parting.wav")
+sad_music.set_volume(0.35)
+
+sad_music_two = pygame.mixer.Sound("13 Deep Sadness.wav")
+
+fountain_music = pygame.mixer.Sound("02b Lively City by the Sea.wav")
+
+home_music = pygame.mixer.Sound("08 Blessing of Nature.wav")
+
+inspiring_song = pygame.mixer.Sound("04 Lola-s Melody.wav")
+
+bad_music = pygame.mixer.Sound("54 Panic.wav")
+bad_music.set_volume(0.35)
+
+epic_music = pygame.mixer.Sound("34 Towering Mountain.wav")
+epic_music.set_volume(0.35)
+
+credits_music = pygame.mixer.Sound("30 Summer.wav")
+credits_music.set_volume(0.35)
+
+journey_music = pygame.mixer.Sound("06 The Earth.wav")
+journey_music.set_volume(0.35)
+
+final_boss_music = pygame.mixer.Sound("46 Final Battle.wav")
+final_boss_music.set_volume(0.35)
+
+timeVeryShort = 1.5
+timeShort = 3
+timeLong = 6
+timeVeryLong = 9
+timeExtremelyLong = 12
+
+class GLUM():
+    def __init__(self, gHP=22, gDam=6, gAttack="he decimates with a swing of his falchion", gName="Green Lean Ugly Machine", gDeath=False):
+        self.gHP = gHP
+        self.gDam = gDam
+        self.gAttack = gAttack
+        self.gName = gName
+        self.gDeath = gDeath
+
+
+class Urgram():
+    def __init__(self, uHP=22, uDam=2, uAttack="Smashes with his Morning Star", uTrust=False, uName="Urgram", uDeath=False):
+        self.uHP = uHP
+        self.uDam = uDam
+        self.uAttack = uAttack
+        self.uTrust= uTrust
+        self.uName = uName
+        self.uDeath = uDeath
+
+
+class HuroHuro():
+    def __init__(self, hhHP=6, hhDam=6, hhAttack="Sneak Attacks with his Daggers", hhTrust=False, hhName="Huro-Huro", hhDeath=False):
+        self.hhHP = hhHP
+        self.hhDam = hhDam
+        self.hhAttack = hhAttack
+        self.hhTrust = hhTrust
+        self.hhName = hhName
+        self.hhDeath = hhDeath
+
+
+class Riila():
+    def __init__(self, rHP=13, rDam=3, rAttack="Shoots you Point Blank with her Bow", rTrust=False, rName="Riila", rDeath=False):
+        self.rHP = rHP
+        self.rDam = rDam
+        self.rAttack = rAttack
+        self.rTrust = rTrust
+        self.rName = rName
+        self.rDeath = rDeath
+
+
+class BigDestiny():
+    def __init__(self, bigDHP=8, bigDDam=2, bigDAttack="Big D' pierces with his Rapier", bigDTrust=False,
+                 bigDName="Big D'", bigDeath=False):
+        self.bigDHP = bigDHP
+        self.bigDDam = bigDDam
+        self.bigDAttack = bigDAttack
+        self.bigDTrust = bigDTrust
+        self.bigDName = bigDName
+        self.bigDeath = bigDeath
+
+
+class Town():
+    def __init__(self, angryBaker=False, fountainEvent=False, tavernEvent=False, angryMusician = False,
+                 beerDrink=False, hardDrink=False, angryBarTender=False, usedPie=False):
+        self.angryBaker = angryBaker
+        self.fountainEvent = fountainEvent
+        self.tavernEvent = tavernEvent
+        self.beerDrink = beerDrink
+        self.hardDrink = hardDrink
+        self.angryBarTender = angryBarTender
+        self.usedPie = usedPie
+        self.angryMusician = angryMusician
+
+
+class Hero():
+    def __init__(self, heroName="matt", currentHP=2, currentDam=2, weapCrit=2, weapName="test", weapAttack="test",
+                 weapCritAttack="test", ageName="test", className="test", fitName="test"):
+        self.heroName = heroName
+        self.currentHP = currentHP
+        self.currentDam = currentDam
+        self.weapCrit = weapCrit
+        self.weapName = weapName
+        self.weapAttack = weapAttack
+        self.weapCritAttack = weapCritAttack
+        self.ageName = ageName
+        self.className = className
+        self.fitName = fitName
+
+
+class Combat():
+    def __init__(self, enemyDeath=False, enemyHP=0, enemyDam=0, enemyAttack="Test", enemyName="Test", fighting=False):
+        self.enemyName = enemyName
+        self.enemyHP = enemyHP
+        self.enemyDam = enemyDam
+        self.enemyAttack = enemyAttack
+        self.fighting = fighting
+        self.enemyDeath = enemyDeath
+
+    def battle(self):
+        while self.fighting:
+            if theHero.currentHP >= 0 and self.enemyHP >= 0:
+                if random.randrange(0, 6) == 0:
+                    print("Attack                   select # 1")
+                    print("Critical Attack          select # 2")
+                    answer = input()
+                    if answer == "1":
+                        print(f"{theHero.heroName} attacks, {theHero.weapAttack}, {theHero.currentDam} damage was done")
+                        self.enemyHP = self.enemyHP - theHero.currentDam
+                        print(f"{self.enemyName}s current HP: {self.enemyHP}\n")
+                        print(f"{self.enemyName} attacks, {self.enemyAttack}, {self.enemyDam} damage was done")
+                        theHero.currentHP = theHero.currentHP - self.enemyDam
+                        print(f"{theHero.heroName} current HP: {theHero.currentHP}\n")
+                    elif answer == "2":
+                        print(
+                            f"{theHero.heroName} attacks, {theHero.weapCritAttack}, {theHero.weapCrit} damage was done")
+                        self.enemyHP = self.enemyHP - theHero.weapCrit
+                        print(f"{self.enemyName}s current HP: {self.enemyHP}\n")
+                        print(f"{self.enemyName} attacks, {self.enemyAttack}, {self.enemyDam} damage was done")
+                        theHero.currentHP = theHero.currentHP - self.enemyDam
+                        print(f"{theHero.heroName} current HP: {theHero.currentHP}\n")
+                    else:
+                        print("Attack missed")
+                        print(f"{self.enemyName} attacks, {self.enemyAttack}, {self.enemyDam} damage was done")
+                        theHero.currentHP = theHero.currentHP - self.enemyDam
+                        print(f"{theHero.heroName} current HP: {theHero.currentHP}\n")
+                else:
+                    print("Attack                   select # 1")
+                    answer = input()
+                    if answer == "1":
+                        print(f"{theHero.heroName} attacks, {theHero.weapAttack}, {theHero.currentDam} damage was done")
+                        self.enemyHP = self.enemyHP - theHero.currentDam
+                        print(f"{self.enemyName}s current HP: {self.enemyHP}\n")
+                        print(f"{self.enemyName} attacks, {self.enemyAttack}, {self.enemyDam} damage was done")
+                        theHero.currentHP = theHero.currentHP - self.enemyDam
+                        print(f"{theHero.heroName} current HP: {theHero.currentHP}\n")
+                    else:
+                        print("Attack missed")
+                        print(f"{self.enemyName} attacks, {self.enemyAttack}, {self.enemyDam} damage was done")
+                        theHero.currentHP = theHero.currentHP - self.enemyDam
+                        print(f"{theHero.heroName} current HP: {theHero.currentHP}\n")
+            elif theHero.currentHP <= 1:
+                print(f"{theHero.heroName} failed in his fight against Big Destiny\n")
+                gameOver()
+            elif self.enemyHP <= 1:
+                battle_music_two.stop()
+                battle_music_three.stop()
+                self.enemyDeath = True
+                battle_music_victory.play(loops=-1)
+                time.sleep(timeShort)
+                self.fighting = False
+
+
+class Inventory():
+    def __init__(self, magicCookie=False, magicElixir=False, checkingItems=False, inspiringSong = False):
+        self.magicCookie = magicCookie
+        self.magicElixir = magicElixir
+        self.checkingItems = checkingItems
+        self.inspiringSong = inspiringSong
+
+    def use(self):
+        while self.checkingItems:
+            if self.magicCookie and self.magicElixir and self.inspiringSong:
+                print("Use Magic Cookie             select # 1")
+                print("Use Magic Elixir             select # 2")
+                print("Remember the Inspiring Song  select # 3")
+                print("Exit Inventory               select # 4\n")
+                answer = input()
+                if answer == "1":
+                    print("You use the Magic Cookie, mysterious effects take place...\n")
+                    self.magicCookie = False
+                    theHero.currentHP += 10
+                elif answer == "2":
+                    print("You use the Magic Elixir, mysterious effects take place...\n")
+                    self.magicElixir = False
+                    theHero.currentDam += 4
+                elif answer == "3":
+                    print("You remember the Inspiring Song, mysterious effects take place...\n")
+                    self.inspiringSong = False
+                    theHero.currentHP += 5
+                    theHero.currentDam += 2
+                elif answer == "4":
+                    print("You do not want to use anything from your Inventory\n")
+                    time.sleep(timeShort)
+                    self.checkingItems = False
+                else:
+                    print("That does not seem to be in your inventory, please try again\n")
+            elif self.magicCookie and self.magicElixir and self.inspiringSong is False:
+                print("Use Magic Cookie             select # 1")
+                print("Use Magic Elixir             select # 2")
+                print("Exit Inventory               select # 3\n")
+                answer = input()
+                if answer == "1":
+                    print("You use the Magic Cookie, mysterious effects take place...\n")
+                    self.magicCookie = False
+                    theHero.currentHP += 10
+                elif answer == "2":
+                    print("You use the Magic Elixir, mysterious effects take place...\n")
+                    self.magicElixir = False
+                    theHero.currentDam += 4
+                elif answer == "3":
+                    print("You do not want to use anything from your Inventory\n")
+                    time.sleep(timeShort)
+                    self.checkingItems = False
+                else:
+                    print("That does not seem to be in your inventory, please try again\n")
+            elif self.magicCookie and self.magicElixir is False and self.inspiringSong:
+                print("Use Magic Cookie             select # 1")
+                print("Remember the Inspiring Song  select # 2")
+                print("Exit Inventory               select # 3\n")
+                answer = input()
+                if answer == "1":
+                    print("You use the Magic Cookie, mysterious effects take place...\n")
+                    self.magicCookie = False
+                    theHero.currentHP += 10
+                elif answer == "2":
+                    print("You remember the Inspiring Song, mysterious effects take place...\n")
+                    self.inspiringSong = False
+                    theHero.currentHP += 5
+                    theHero.currentDam += 2
+                elif answer == "3":
+                    print("You do not want to use anything from your Inventory\n")
+                    time.sleep(timeShort)
+                    self.checkingItems = False
+                else:
+                    print("That does not seem to be in your inventory, please try again\n")
+            elif self.magicCookie and self.magicElixir is False and self.inspiringSong is False:
+                print("Use Magic Cookie             select # 1")
+                print("Exit Inventory               select # 2\n")
+                answer = input()
+                if answer == "1":
+                    print("You use the Magic Cookie, mysterious effects take place...\n")
+                    self.magicCookie = False
+                    theHero.currentHP += 10
+                elif answer == "2":
+                    print("You do not want to use anything from your Inventory\n")
+                    time.sleep(timeShort)
+                    self.checkingItems = False
+                else:
+                    print("That does not seem to be in your inventory, please try again\n")
+            elif self.magicCookie is False and self.magicElixir and self.inspiringSong:
+                print("Use Magic Elixir             select # 1")
+                print("Remember the Inspiring Song  select # 2")
+                print("Exit Inventory               select # 3\n")
+                answer = input()
+                if answer == "1":
+                    print("You use the Magic Elixir, mysterious effects take place...\n")
+                    self.magicElixir = False
+                    theHero.currentDam += 4
+                elif answer == "2":
+                    print("You remember the Inspiring Song, mysterious effects take place...\n")
+                    self.inspiringSong = False
+                    theHero.currentHP += 5
+                    theHero.currentDam += 2
+                elif answer == "3":
+                    print("You do not want to use anything from your Inventory\n")
+                    time.sleep(timeShort)
+                    self.checkingItems = False
+                else:
+                    print("That does not seem to be in your inventory, please try again\n")
+            elif self.magicCookie is False and self.magicElixir and self.inspiringSong is False:
+                print("Use Magic Elixir             select # 1")
+                print("Exit Inventory               select # 2\n")
+                answer = input()
+                if answer == "1":
+                    print("You use the Magic Elixir, mysterious effects take place...\n")
+                    self.magicElixir = False
+                    theHero.currentDam += 4
+                elif answer == "2":
+                    print("You do not want to use anything from your Inventory\n")
+                    time.sleep(timeShort)
+                    self.checkingItems = False
+                else:
+                    print("That does not seem to be in your inventory, please try again\n")
+            elif self.magicCookie is False and self.magicElixir is False and self.inspiringSong:
+                print("Remember the Inspiring Song  select # 1")
+                print("Exit Inventory               select # 2\n")
+                answer = input()
+                if answer == "1":
+                    print("You remember the Inspiring Song, mysterious effects take place...\n")
+                    self.inspiringSong = False
+                    theHero.currentHP += 5
+                    theHero.currentDam += 2
+                elif answer == "2":
+                    print("You do not want to use anything from your Inventory\n")
+                    time.sleep(timeShort)
+                    self.checkingItems = False
+                else:
+                    print("That does not seem to be in your inventory, please try again\n")
+            else:
+                print("You have nothing in your Inventory\n")
+                time.sleep(timeShort)
+                self.checkingItems = False
+
+
+class Allies():
+    def __init__(self, bigTrust=False, urgTrust=False, hurTrust=False, riiTrust=False, useTrust=False):
+        self.bigTrust = bigTrust
+        self.urgTrust = urgTrust
+        self.hurTrust = hurTrust
+        self.riiTrust = riiTrust
+        self.useTrust = useTrust
+
+    def useAlliesTrust(self):
+        while self.useTrust:
+            if self.bigTrust and self.urgTrust and self.hurTrust and self.riiTrust:
+                print("Use Big D's help             select # 1")
+                print("Use Urgram's help            select # 2")
+                print("use Huro-Huro's help         select # 3")
+                print("use Riila's help             select # 4")
+                print("Exit Inventory               select # 5\n")
+                answer = input()
+                if answer == "1":
+                    print("Big Destiny appears and strikes GLUM for 6 damage!\n")
+                    self.bigTrust = False
+                    glumFight.gHP -= 6
+                elif answer == "2":
+                    print("Urgram appears to cheer your on with some cooked meat, you feel more healthy!\n")
+                    self.urgTrust = False
+                    theHero.currentHP += 8
+                elif answer == "3":
+                    print("Huro-Huro appears to cheer you on, you deal a deadly blow to GLUM!\n")
+                    self.hurTrust = False
+                    glumFight.gHP -= theHero.weapCrit
+                elif answer == "4":
+                    print("Riila appears to cheer you on, you feel more powerful!\n")
+                    self.riiTrust = False
+                    theHero.currentDam += 4
+                elif answer == "5":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust and self.urgTrust and self.hurTrust and self.riiTrust is False:
+                print("Use Big D's help             select # 1")
+                print("Use Urgram's help            select # 2")
+                print("use Huro-Huro's help         select # 3")
+                print("Exit Inventory               select # 4\n")
+                answer = input()
+                if answer == "1":
+                    print("Big Destiny appears and strikes GLUM for 6 damage!\n")
+                    self.bigTrust = False
+                    glumFight.gHP -= 6
+                elif answer == "2":
+                    print("Urgram appears to cheer your on with some cooked meat, you feel more healthy!\n")
+                    self.urgTrust = False
+                    theHero.currentHP += 8
+                elif answer == "3":
+                    print("Huro-Huro appears to cheer you on, you deal a deadly blow to GLUM!\n")
+                    self.riiTrust = False
+                    glumFight.gHP -= theHero.weapCrit
+                elif answer == "4":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust and self.urgTrust and self.hurTrust is False and self.riiTrust is False:
+                print("Use Big D's help             select # 1")
+                print("Use Urgram's help            select # 2")
+                print("Exit Inventory               select # 3\n")
+                answer = input()
+                if answer == "1":
+                    print("Big Destiny appears and strikes GLUM for 6 damage!\n")
+                    self.bigTrust = False
+                    glumFight.gHP -= 6
+                elif answer == "2":
+                    print("Urgram appears to cheer your on with some cooked meat, you feel more healthy!\n")
+                    self.urgTrust = False
+                    theHero.currentHP += 8
+                elif answer == "3":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust and self.urgTrust is False and self.hurTrust is False and self.riiTrust is False:
+                print("Use Big D's help             select # 1")
+                print("Exit Inventory               select # 2\n")
+                answer = input()
+                if answer == "1":
+                    print("Big Destiny appears and strikes GLUM for 6 damage!\n")
+                    self.bigTrust = False
+                    glumFight.gHP -= 6
+                elif answer == "2":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust is False and self.urgTrust and self.hurTrust and self.riiTrust:
+                print("Use Urgram's help            select # 1")
+                print("use Huro-Huro's help         select # 2")
+                print("use Riila's help             select # 3")
+                print("Exit Inventory               select # 4\n")
+                answer = input()
+                if answer == "1":
+                    print("Urgram appears to cheer your on with some cooked meat, you feel more healthy!\n")
+                    self.urgTrust = False
+                    theHero.currentHP += 8
+                elif answer == "2":
+                    print("Huro-Huro appears to cheer you on, you deal a deadly blow to GLUM!\n")
+                    self.hurTrust = False
+                    glumFight.gHP -= theHero.weapCrit
+                elif answer == "3":
+                    print("Riila appears to cheer you on, you feel more powerful!\n")
+                    self.riiTrust = False
+                    theHero.currentDam += 4
+                elif answer == "4":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust is False and self.urgTrust and self.hurTrust and self.riiTrust is False:
+                print("Use Urgram's help            select # 1")
+                print("use Huro-Huro's help         select # 2")
+                print("Exit Inventory               select # 3\n")
+                answer = input()
+                if answer == "1":
+                    print("Urgram appears to cheer your on with some cooked meat, you feel more healthy!\n")
+                    self.urgTrust = False
+                    theHero.currentHP += 8
+                elif answer == "2":
+                    print("Huro-Huro appears to cheer you on, you deal a deadly blow to GLUM!\n")
+                    self.hurTrust = False
+                    glumFight.gHP -= theHero.weapCrit
+                elif answer == "3":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust is False and self.urgTrust and self.hurTrust is False and self.riiTrust is False:
+                print("Use Urgram's help            select # 1")
+                print("Exit Inventory               select # 2\n")
+                answer = input()
+                if answer == "1":
+                    print("Urgram appears to cheer your on with some cooked meat, you feel more healthy!\n")
+                    self.urgTrust = False
+                    theHero.currentHP += 8
+                elif answer == "2":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust is False and self.urgTrust is False and self.hurTrust and self.riiTrust:
+                print("use Huro-Huro's help         select # 1")
+                print("use Riila's help             select # 2")
+                print("Exit Inventory               select # 3\n")
+                answer = input()
+                if answer == "1":
+                    print("Huro-Huro appears to cheer you on, you deal a deadly blow to GLUM!\n")
+                    self.hurTrust = False
+                    glumFight.gHP -= theHero.weapCrit
+                elif answer == "2":
+                    print("Riila appears to cheer you on, you feel more powerful!\n")
+                    self.riiTrust = False
+                    theHero.currentDam += 4
+                elif answer == "3":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust is False and self.urgTrust is False and self.hurTrust and self.riiTrust is False:
+                print("use Huro-Huro's help         select # 1")
+                print("Exit Inventory               select # 2\n")
+                answer = input()
+                if answer == "1":
+                    print("Huro-Huro appears to cheer you on, you deal a deadly blow to GLUM!\n")
+                    self.hurTrust = False
+                    glumFight.gHP -= theHero.weapCrit
+                elif answer == "2":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust is False and self.urgTrust is False and self.hurTrust is False and self.riiTrust:
+                print("use Riila's help             select # 1")
+                print("Exit Inventory               select # 2\n")
+                answer = input()
+                if answer == "1":
+                    print("Riila appears to cheer you on, you feel more powerful!\n")
+                    self.riiTrust = False
+                    theHero.currentDam += 4
+                elif answer == "2":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            else:
+                print("You have gotten all of the help from your allies\n")
+                time.sleep(timeShort)
+                self.useTrust = False
+
+
+townPlace = Town()
+theHero = Hero()
+bigDestinyFight = BigDestiny()
+theCombat = Combat()
+useItems = Inventory()
+urgramFight = Urgram()
+huroHuroFight = HuroHuro()
+riilaFight = Riila()
+glumFight = GLUM()
+getAllies= Allies()
+
+
+def gameOver():
+    intro_song.stop()
+    bad_music.stop()
+    town_music.stop()
+    failure_song.stop()
+    battle_music_two.stop()
+    failure_song.play(loops=-1)
+    print(f"\n I do not remember the story ending for {theHero.heroName} that way or maybe it did.")
+    print("Stop the story and give up?               Select # 1 \n")
+    answer = input("")
+    if "1" in answer:
+        quit()
+    else:
+        gameOver()
+
+
+def startGame():
+    intro_song.stop()
+    failure_song.stop()
+    intro_song.play(loops=-1)
+    print("Welcome travel. Sit down and let me tell you a story, the story of the champion ... ")
+    print("Enter the hero's name:\n")
+    theHero.heroName = input("")
+    print(f"Awe yes the great hero {theHero.heroName} and his great triumph over the Green Lean Ugly Machine")
+    time.sleep(timeShort)
+    beginningPT2_AGE()
+
+
+def beginningPT2_AGE():
+    print(f"Tell me a little bit about {theHero.heroName} let's start with how they looks")
+    print("The shoes can tell you a lot about a person, how much they make, and where they have been. \n")
+    time.sleep(timeLong)
+    print("did they look like baby shoes          (select # 1)")
+    print("did his shoes look like new shoes      (select # 2)")
+    print("were they running shoes                (select # 3)")
+    print("did they look like fancy shoes         (select # 4)")
+    print("did his shoes look like terribly old   (select # 5)\n")
+    answer = input()
+    if answer == "1":
+        print("Awe yes that's right, they were baby shoes \n")
+        theHero.currentHP = 5
+        theHero.currentDam = 1
+        theHero.ageName = "Baby"
+    elif answer == "2":
+        print("Awe yes that's right, they were new shoes \n")
+        theHero.currentHP = 6
+        theHero.currentDam = 4
+        theHero.ageName = "Young"
+    elif answer == "3":
+        print("Awe yes that's right, they were running shoes \n")
+        theHero.currentHP = 7
+        theHero.currentDam = 3
+        theHero.ageName = "Late 20's"
+    elif answer == "4":
+        print("Awe yes that's right, they were fancy shoes \n")
+        theHero.currentHP = 9
+        theHero.currentDam = 2
+        theHero.ageName = "Seasoned"
+    elif answer == "5":
+        print("Awe yes that's right, they were old shoes \n")
+        theHero.currentHP = 6
+        theHero.currentDam = 1
+        theHero.ageName = "Old"
+    else:
+        print("That choice was not given, Please try again \n")
+        time.sleep(timeShort)
+        beginningPT2_AGE()
+    time.sleep(timeShort)
+    beginningPT3_FIT()
+
+
+def beginningPT3_FIT():
+    print(f"Tell me more about {theHero.heroName} what activities did they do in their free time?")
+    print("What a person does when no one is watching defines us as people.\n")
+    time.sleep(timeLong)
+    print("Did they play a lot with numbers, moving 1s and 0s?      (select # 1)")
+    print("Were they in the habit of practicing for battle often?   (select # 2)")
+    print("Did they get into too many deadly duels?                 (select # 3)")
+    print("Were they exercising every now and then?                 (select # 4)")
+    print("Were games like cards, dice, and such, played often?     (select # 5)\n")
+    answer = input()
+    if answer == "1":
+        print("Awe yes that's right, they were playing with number in their free time.\n")
+        theHero.currentHP += 5
+        theHero.currentDam += 1
+        theHero.fitName = "Unfit"
+    elif answer == "2":
+        print("Awe yes that's right, they were practicing for battle in their free time.\n")
+        theHero.currentHP += 8
+        theHero.currentDam += 3
+        theHero.fitName = "Above Average"
+    elif answer == "3":
+        print("Awe yes that's right, they were getting into duels in their free time.\n")
+        theHero.currentHP += 9
+        theHero.currentDam += 4
+        theHero.fitName = "Very Fit"
+    elif answer == "4":
+        print("Awe yes that's right, they were exercising in their free time.\n")
+        theHero.currentHP += 7
+        theHero.currentDam += 2
+        theHero.fitName = "Average"
+    elif answer == "5":
+        print("Awe yes that's right, they were playing games in their free time. \n")
+        theHero.currentHP += 6
+        theHero.currentDam += 1
+        theHero.fitName = "Below Average"
+    else:
+        print("That choice was not given, Please try again \n")
+        time.sleep(timeShort)
+        beginningPT3_FIT()
+    time.sleep(timeShort)
+    beginningPT4_CLASS()
+
+
+def beginningPT4_CLASS():
+    print(f"Oh yes, we're getting a much better picture of {theHero.heroName} but there is one more thing.")
+    print("How were their dietary habits, what really filled their belly \n")
+    time.sleep(timeLong)
+    print("Did they prefer stolen food?                             (select # 1)")
+    print("Were they in the habit of eating only Kosher food?       (select # 2)")
+    print("Did they only eat raw meat?                              (select # 3)")
+    print("Was their food of a foreign variety                      (select # 4)")
+    print("Were they in normally eating a well balanced meal?       (select # 5)\n")
+    answer = input()
+    if answer == "1":
+        print("Awe yes that's right, they would eat food that did not belong to them.\n")
+        theHero.currentHP += 5
+        theHero.currentDam += 1
+        theHero.className = "Thief"
+    elif answer == "2":
+        print("Awe yes that's right, they would eat Kosher meals.\n")
+        theHero.currentHP += 9
+        theHero.currentDam += 2
+        theHero.className = "Paladin"
+    elif answer == "3":
+        print("Awe yes that's right, they would eat raw meat.\n")
+        theHero.currentHP += 8
+        theHero.currentDam += 3
+        theHero.className = "Beastman"
+    elif answer == "4":
+        print("Awe yes that's right, they would only eat foreign food.\n")
+        theHero.currentHP += 7
+        theHero.currentDam += 3
+        theHero.className = "Warrior"
+    elif answer == "5":
+        print("Awe yes that's right, they would eat well balanced meals \n")
+        theHero.currentHP += 8
+        theHero.currentDam += 2
+        theHero.className = "Knight"
+    else:
+        print("That choice was not given, Please try again \n")
+        time.sleep(timeShort)
+        beginningPT4_CLASS()
+    print(
+        f"Awe yes I remember now the {theHero.fitName}, {theHero.ageName}, {theHero.className}, {theHero.heroName}!\n")
+    beginningPT5_WEAP()
+
+
+def beginningPT5_WEAP():
+    time.sleep(timeLong)
+    print("Now that we know a good bit about the hero, what was their choice of weapon?\n")
+    time.sleep(timeShort)
+    print("Did they prefer a good old fashion Sword?                (select # 1)")
+    print("Have they a fancy for a Battle Axe?                      (select # 2)")
+    print("Were they normally in the mood for Long Range?           (select # 3)")
+    print("Would they get up close and personal with Daggers?       (select # 4)")
+    print("Would they fight at a range with a Long Spear?           (select # 5)")
+    print("Did they fight like a wild thing, with tooth and claw?   (select # 6)\n")
+    answer = input()
+    if answer == "1":
+        print("Awe yes that's right, they would fight with a Sword.\n")
+        theHero.currentDam += 3
+        theHero.weapCrit = theHero.currentDam * 2
+        theHero.weapName = "Sword"
+        theHero.weapAttack = "The Sword Slashes!"
+        theHero.weapCritAttack = "A Tremendous Blow!"
+    elif answer == "2":
+        print("Awe yes that's right, they would fight with a Battle Axe.\n")
+        theHero.currentDam += 3
+        theHero.weapCrit = theHero.currentDam * 3
+        theHero.weapName = "Battle Axe"
+        theHero.weapAttack = "The Axe Cleaves!"
+        theHero.weapCritAttack = "An Annihilating Strike!"
+    elif answer == "3":
+        print("Awe yes that's right, they would fight with a Bow.\n")
+        theHero.currentDam += 2
+        theHero.weapCrit = theHero.currentDam * 2
+        theHero.weapName = "Bow"
+        theHero.weapAttack = "The Bow Twangs and an Arrow Flies!"
+        theHero.weapCritAttack = "A Powerful Shot!"
+    elif answer == "4":
+        print("Awe yes that's right, they would fight with a Daggers.\n")
+        theHero.currentDam += 2
+        theHero.weapCrit = theHero.currentDam * 3
+        theHero.weapName = "Daggers"
+        theHero.weapAttack = "The Daggers Cuts Deep!"
+        theHero.weapCritAttack = "A Stab to a Vital spot!"
+    elif answer == "5":
+        print("Awe yes that's right, they would fight with a Long Spear.\n")
+        theHero.currentDam += 2
+        theHero.weapCrit = theHero.currentDam * 3
+        theHero.weapName = "Long Spear"
+        theHero.weapAttack = "The Spear Pierces!"
+        theHero.weapCritAttack = "A Deadly Spinning Thrust!"
+    elif answer == "6":
+        print("Awe yes that's right, they would fight with a Claws.\n")
+        theHero.currentDam += 3
+        theHero.weapCrit = theHero.currentDam * 3
+        theHero.weapName = "Claws"
+        theHero.weapAttack = "The Claws Tear the Flesh!"
+        theHero.weapCritAttack = "A Thunderous Ripping"
+    else:
+        print("That choice was not given, Please try again \n")
+        time.sleep(timeShort)
+        beginningPT5_WEAP()
+
+    print(f"Now that we have a good picture of the hero {theHero.heroName} who fought with his {theHero.weapName}!\n")
+    print(
+        f"Current HP = {theHero.currentHP}, Current Dam = {theHero.currentDam}, current crit dam = {theHero.weapCrit}\n")
+    time.sleep(timeShort)
+    print("Well lets get on with the story!\n\n")
+    intro_song.stop()
+    transition_song.play(loops=-1)
+    time.sleep(timeLong)
+    storyPT1_Town()
+
+
+def storyPT1_Town():
+    transition_song.stop()
+    town_music.stop()
+    town_music.play(loops=-1)
+    print(f"{theHero.heroName.upper()}! {theHero.heroName.upper()}! Where have you Been? I have been cleaning up "
+          "for ages,\nand we have guests in a few hours! Go to the Store and pick up a few things for me please!\n"
+          "Your aunt Merkle and grandpa Biedon are coming over so you will need to get that BLUEBERRY PIE!\n")
+    time.sleep(timeVeryLong)
+    print(f"{theHero.heroName} went on their way to the store to pick up groceries and a BLUEBERRY PIE")
+    print(f"After not too long {theHero.heroName} finished picking up what they needed and \n"
+          "made their way to the bakery.\n")
+    storyPT2_Pie()
+
+
+def storyPT2_Pie():
+    time.sleep(timeLong)
+    print(f"You there! why isn't that {theHero.heroName} what can I get you me'fellow?")
+    answer = input("#Tell the baker what you want:   \n\n")
+    answer = answer.upper()
+    if "BLUE" in answer:
+        print("Awe yes me'fellow, here you are, that'll' be 2 copper pieces.\n")
+        storyPT3_PiePT2()
+    else:
+        print("The baker did not understand the request, please try again\n")
+        storyPT2_Pie()
+
+
+def storyPT3_PiePT2():
+    time.sleep(timeShort)
+    print(f"{theHero.heroName} reached into his coin purse and pulled out\n")
+    print("2 copper pieces                        (select # 1)")
+    print("3 copper pieces, 'for your troubles'   (select # 2)")
+    print("1 silver piece, 'for your troubles'    (select # 3)")
+    print("Nothing *runs away with the pie!*      (select # 4)\n")
+    answer = input()
+    if answer == "1":
+        print("Thank you, have a great day!\n")
+    elif answer == "2":
+        print("Thank you, and a tip no less! have a bless'ed day\n!")
+    elif answer == "3":
+        print(f"Whats this {theHero.heroName}? oh my what a mighty gesture THANK YOU!")
+        print("Here take this magic cookie with you, it could come in handy!\n")
+        useItems.magicCookie = True
+    elif answer == "4":
+        print(f"Hey you get back here {theHero.heroName.upper()} You Thief!\n")
+        townPlace.angryBaker = True
+    else:
+        print("That does not seem to be an option, please try again\n")
+        storyPT3_PiePT2()
+    storyPT4_theChoice()
+
+
+def storyPT4_theChoice():
+    tavern_music.stop()
+    inspiring_song.stop()
+    fountain_music.stop()
+    town_music.stop()
+    battle_music_victory.stop()
+    sad_music.stop()
+    town_music.play()
+    time.sleep(timeShort)
+    print(f"{theHero.heroName} decided to go to...")
+    print("Go to the Tavern         select # 1")
+    print("Go to the fountain       select # 2")
+    print("Go home                  select # 3\n")
+    answer = input()
+    if answer == "1":
+        if townPlace.tavernEvent:
+            print(f"{theHero.heroName} has already been there, please try again\n")
+            storyPT4_theChoice()
+        else:
+            print(f"{theHero.heroName} decided to go to the Tavern\n")
+            townPlace.tavernEvent = True
+            storyPT5_entertheTavern()
+    elif answer == "2":
+        if townPlace.fountainEvent:
+            print(f"{theHero.heroName} has already been there, please try again\n")
+            storyPT4_theChoice()
+        else:
+            print(f"{theHero.heroName} decided to go to the Fountain\n")
+            townPlace.fountainEvent = True
+            storyPT6_entertheFountain()
+    elif answer == "3":
+        print(f"{theHero.heroName} decided to go Home\n")
+        storyPT7_Home()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        storyPT4_theChoice()
+
+
+def storyPT5_entertheTavern():
+    town_music.stop()
+    tavern_music.stop()
+    battle_music_victory.stop()
+    tavern_music.play(loops=-1)
+    time.sleep(timeShort)
+    print("Another wonderful day in the tavern, so many people you know")
+    print("The bar keep welcomes you and ready to take your order\n")
+    time.sleep(timeLong)
+    storyPT5_theTavern()
+
+def storyPT5_theTavern():
+    if townPlace.hardDrink and townPlace.beerDrink:
+        storyPT5_theTavern_PT2()
+    else:
+        print("Have a drink 'Beer'          select # 1")
+        print("Have a drink 'Hard Alcohol'  select # 2")
+        print("Leave                        select # 3\n")
+        answer = input()
+        if answer == "1":
+            townPlace.beerDrink = True
+            print("You have a nice refreshing pint of beer!\n")
+            storyPT5_theTavern()
+        elif answer == "2":
+            townPlace.hardDrink = True
+            print("You feel the heat in your stomach of a hard spirit\n")
+            storyPT5_theTavern()
+        elif answer == "3":
+            storyPT4_theChoice()
+        else:
+            print("That does not seem to be an option, please try again\n")
+            storyPT5_theTavern()
+
+
+def storyPT5_theTavern_PT2():
+    time.sleep(timeShort)
+    print("*Big Destiny walks in with his two of his cronies*")
+    print("Hey bar keeps, we are here for our protection money!")
+    print("Crony: 'You better pay up before things get broken'\n")
+    print("Talk to Big Destiny              select # 1")
+    print("Fight Big Destiny                select # 2")
+    print("Do not get involved  *leaves*    select # 3\n")
+    answer = input()
+    if answer == "1":
+        storyPT5_theTavern_PT3talk()
+    elif answer == "2":
+        storyPT5_theTavern_PT4fight()
+    elif answer == "3":
+        townPlace.angryBarTender = True
+        storyPT4_theChoice()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        storyPT5_theTavern_PT2()
+
+
+def storyPT5_theTavern_PT3talk():
+    time.sleep(timeShort)
+    print("'You won't be taking anything while I'm around!      select # 1")
+    print("'Why are you doing this?'                            select # 2")
+    print("'You are the lowest scum of the earth!'              select # 3")
+    print("'Can I join your gang?'                              select # 4\n")
+    answer = input()
+    answer = answer.upper()
+    if answer == "1":
+        print("Big D: Then you will die where you stand!\n")
+        storyPT5_theTavern_PT4fight()
+    elif answer == "2":
+        storyPT5_theTavern_PT3talk_PT2()
+    elif answer == "3":
+        print("Big D: You think your so big? Then you will not leave here alive!\n")
+        storyPT5_theTavern_PT4fight()
+    elif answer == "4":
+        townPlace.angryBarTender = True
+        if theHero.currentDam >= 8:
+            print("Prove to me your POWER and you can join!")
+            print("Arm wrestle with Big Destiny to prove your POWER\n")
+            answer = input()
+            answer = answer.upper()
+            if "POW" in answer:
+                bigDestinyFight.bigDTrust = True
+                print("Yes you are quite powerful and can join my gang")
+                print(f"{theHero.heroName} leaves the tavern\n")
+                storyPT4_theChoice()
+            else:
+                print("You are not strong enough! Get out of here!\n")
+                storyPT4_theChoice()
+        else:
+            print("No your too weak! Get out of here!\n")
+            storyPT4_theChoice()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        storyPT5_theTavern_PT3talk()
+
+
+def storyPT5_theTavern_PT3talk_PT2():
+    print("Big D: Why you ask? I just like this SORT of thing")
+    print("I am powerful and have it all!")
+    print("You are sick!                                        select # 1")
+    print("You should get out of here before you get hurt!      select # 2")
+    print("Sounds fun. Can I join you?                          select # 3\n")
+    answer = input()
+    answer = answer.upper()
+    if answer == "1":
+        print("Big D: I may be sick but you are a dead man!")
+        storyPT5_theTavern_PT4fight()
+    elif answer == "2":
+        print("Big D: I may get hurt? Well then bring it on!")
+        storyPT5_theTavern_PT4fight()
+    elif answer == "3":
+        townPlace.angryBarTender = True
+        if theHero.currentDam >= 8:
+            print("Prove to me your POWER and you can join!")
+            print("Arm wrestle with Big Destiny to prove your POWER\n")
+            answer = input()
+            answer = answer.upper()
+            if "POW" in answer:
+                bigDestinyFight.bigDTrust = True
+                print("Yes you are quite powerful and can join my gang")
+                print(f"{theHero.heroName} leaves the tavern\n")
+                storyPT4_theChoice()
+            else:
+                print("You are not strong enough! Get out of here!\n")
+                storyPT4_theChoice()
+    elif answer == "SORT":
+        storyPT5_theTavern_PT3talk_PT3()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        storyPT5_theTavern_PT3talk_PT2()
+
+
+def storyPT5_theTavern_PT3talk_PT3():
+    tavern_music.stop()
+    sad_music.stop()
+    sad_music.play(loops=-1)
+    print("Big D: What you see through my bravado?")
+    print("I didn't always live a life of crime...")
+    print("My daughter has a very rare and deadly illness")
+    print("We only have a few more months until she dies. Unless I can get the money for treatment")
+    print("So I have been using my boys to mash up the town to get money out of them, but I don't want to\n")
+    time.sleep(timeVeryLong)
+    print("Now I have turned to the life of crime, if I do get the money, what will she THINK of me...\n\n")
+    print("Big D, this is no way to help your daughter, turn yourself in to the authorities     select # 1")
+    print("Take pity on Big D and give him 1 gold coin (worth 1000 copper pieces)               select # 2")
+    print("*Cut down Big D and the Destiny Gang*                                                select # 3\n")
+    answer = input()
+    answer = answer.upper()
+    if answer == "1":
+        print("Big D: Maybe your right, I have caused too much pain in this world, my daughter would never forgive me")
+        print("*The Destiny gang leaves to turn themselves in remorseful*\n")
+        time.sleep(timeLong)
+        storyPT4_theChoice()
+    elif answer == "2":
+        print("This is insane you are giving me all this money?!")
+        print(f"With this I can pay for my daughter's treatment! Thank you {theHero.heroName}!")
+        print("*Big Destiny and the Destiny gang leave*")
+        bigDestinyFight.bigDTrust = True
+        time.sleep(timeLong)
+        storyPT4_theChoice()
+    elif answer == "3":
+        print(f"{theHero.heroName} defeated Big Destiny and his cronies")
+        print(f"Bar Tender: {theHero.heroName} you have saved us from the tyranny of Big Destiny")
+        print("Please take this magic elixir with you ")
+        useItems.magicElixir = True
+        print(f"{theHero.heroName} left the tavern triumphantly\n")
+        time.sleep(timeLong)
+        storyPT4_theChoice()
+    elif answer == "THINK":
+        storyPT5_theTavern_PT3talk_PT4()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        storyPT5_theTavern_PT3talk_PT3()
+
+
+def storyPT5_theTavern_PT3talk_PT4():
+    print("There is always another way, have you heard of the traveling doctor located in DunWitch?\n"
+          "He will help you for free, his name is Jonas him and..."
+          "his team the Jonas Brothers will help you!                                           select # 1")
+    print("Head to the Jonas Brothers after you return the money back to the town's folk        select # 2\n")
+    answer = input()
+    if answer == "1":
+        print(f"Thank you {theHero.heroName}, we will make our way out to the Jonas Brothers")
+        print("Big D and the Destiny gang leave\n")
+        bigDestinyFight.bigDTrust = True
+        storyPT4_theChoice()
+    elif answer == "2":
+        print(f"Thank you {theHero.heroName}, we will make our way out to the Jonas Brothers")
+        print("Big D and the Destiny gang leave\n")
+        bigDestinyFight.bigDTrust = True
+        print(f"Bar Tender: {theHero.heroName} you have saved us from the tyranny of Big Destiny")
+        print("Please take this magic elixir with you ")
+        useItems.magicElixir = True
+        print(f"{theHero.heroName} left the tavern triumphantly\n")
+        time.sleep(timeLong)
+        storyPT4_theChoice()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        storyPT5_theTavern_PT3talk_PT4()
+
+
+def storyPT5_theTavern_PT4fight():
+    tavern_music.stop()
+    battle_music_two.stop()
+    battle_music_two.play(loops=-1)
+    if useItems.inspiringSong or useItems.magicCookie or useItems.magicElixir:
+        print("Shall you check your Inventory?")
+        print("Yes, check Inventory     select # 1")
+        print("Do not check Inventory   select # 2\n")
+        answer = input()
+        if answer == "1":
+            useItems.checkingItems = True
+            useItems.use()
+        elif answer == "2":
+            pass
+        else:
+            print("That does not seem to be an option, please try again\n")
+            storyPT5_theTavern_PT4fight()
+    else:
+        pass
+    theCombat.enemyDeath = bigDestinyFight.bigDeath
+    theCombat.enemyName = bigDestinyFight.bigDName
+    theCombat.enemyHP = bigDestinyFight.bigDHP
+    theCombat.enemyDam = bigDestinyFight.bigDDam
+    theCombat.enemyAttack = bigDestinyFight.bigDAttack
+    time.sleep(timeShort)
+    theCombat.fighting = True
+    theCombat.battle()
+    print(f"{theHero.heroName} defeated Big Destiny and his cronies run away")
+    print(f"{theHero.heroName} you have saved us from the tyranny of Big Destiny")
+    print("Please take this magic elixir with you ")
+    useItems.magicElixir = True
+    print(f"{theHero.heroName} left the tavern triumphantly\n")
+    time.sleep(timeLong)
+    storyPT4_theChoice()
+
+
+def storyPT6_entertheFountain():
+    town_music.stop()
+    fountain_music.play(loops=-1)
+    print("Another bight and sunny day at the town fountain")
+    print("Water is splashing and people are feeding the birds\n")
+    time.sleep(timeLong)
+    storyPT6_theFountain()
+
+def storyPT6_theFountain():
+    print("Talk to the old man          select # 1")
+    print("Feed the birds               select # 2")
+    print("Take in the sights           select # 3")
+    print("Leave                        select # 4\n")
+    answer = input()
+    if answer == "1":
+        print("Old man: I used to be with the love of my life but she died while I was away at the war")
+        print("Ironic to think, that she safe at home was in more danger than me at war")
+        print("I never loved again, now all I have are the birds, its been like this for 62 years...\n")
+        time.sleep(timeVeryLong)
+        storyPT6_theFountain()
+    elif answer == "2":
+        print("You brought nothing to feed the birds with, except for this pie")
+        print("Will you feed the birds with some of the pie?        select # 1")
+        print("Do not feed the birds                                select # 2\n")
+        answer = input()
+        if answer == "1":
+            print("You feed the birds a piece of the pie")
+            townPlace.usedPie = True
+            print("The birds Happily accept some of your pie, and happily devour the crumbs offered\n")
+            storyPT6_theFountain()
+        elif answer == "2":
+            print("You decide to not feed the birds\n")
+            storyPT6_theFountain()
+        else:
+            print("That does not seem to be an option, please try again\n")
+            storyPT6_theFountain()
+    elif answer == "3":
+        print("A perfect blue sky, not a could in sight")
+        print("Some of the birds seem to be going towards the park\n")
+        print("Go to the park to see what the birds are up to?          select # 1")
+        print("Stay at the fountain                                     select # 2\n")
+        answer = input()
+        if answer == "1":
+            print("You go to investigate the park\n")
+            storyPT6_theFountain_PT2()
+        elif answer == "2":
+            print("You decide to stay in the fountain area a little longer\n")
+            storyPT6_theFountain()
+        else:
+            print("That does not seem to be an option, please try again\n")
+            storyPT6_theFountain()
+    elif answer == "4":
+        storyPT4_theChoice()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        storyPT6_theFountain()
+
+
+def storyPT6_theFountain_PT2():
+    fountain_music.stop()
+    inspiring_song.play(loops=-1)
+    time.sleep(timeShort)
+    print("There is a boy playing music")
+    print("All of the animals and birds have gathered around to listen")
+    print("You will remember this inspiring song, for when needed   select # 1")
+    print("Make fart noises to interrupt the music                  select # 2\n")
+    answer = input()
+    if answer == "1":
+        useItems.inspiringSong = True
+        print("You remember the inspiring song")
+    elif answer == "2":
+        townPlace.angryMusician = True
+        print("You make music of your own, angering the musician")
+    else:
+        print("That does not seem to be an option, please try again\n")
+        storyPT6_theFountain_PT2()
+    time.sleep(timeShort)
+    storyPT4_theChoice()
+
+def storyPT7_Home():
+    town_music.stop()
+    if townPlace.angryBaker and townPlace.angryBarTender and townPlace.angryMusician:
+        bad_music.play(loops=-1)
+        print(f"While {theHero.heroName} was on their way home, they get jumped by a group of masked town's folk!")
+        print(f"Apparently, {theHero.heroName} angered a lot of people during their visit\n")
+        theHero.currentHP -= 20
+        print(f"Current HP: {theHero.currentHP}\n")
+        time.sleep(timeLong)
+        if theHero.currentHP <= 0:
+            gameOver()
+        else:
+            pass
+    else:
+        pass
+    bad_music.stop()
+    home_music.play(loops=-1)
+    time.sleep(timeShort)
+    print(f"Welcome back {theHero.heroName}, I see your brought the pie *inspects pie*\n")
+    if townPlace.usedPie:
+        print("This Pie has been partially eaten! *Gives you a big smack*\n")
+        theHero.currentHP -= 3
+        print(f"3 points of damage was taken, and you feel bad, current HP: {theHero.currentHP}\n")
+        if theHero.currentHP <= 0:
+            gameOver()
+        else:
+            pass
+    else:
+        print("Well that looks right, hmm, yes Blueberry Pie, in good condition. Thank you!\n")
+    time.sleep(timeLong)
+    print("Well we will get things ready for the party, more friends and family will be showing up soon.")
+    print("Why do you head over to the Mayor's place and pick up your little lovebug Riley, I will have everything "
+          "ready soon\n")
+    time.sleep(timeVeryLong)
+    storyPT8_PickingUp_Riley()
+
+
+def storyPT8_PickingUp_Riley():
+    print("Its a nice night for a walk to Riley's place, it has always been an enjoyable path but tonight is going\n"
+          "to be great, a big fancy party just to celebrate, just because. It's exciting and will be a good night!\n")
+    time.sleep(timeVeryLong)
+    home_music.stop()
+    sad_music_two.play(loops=-1)
+    print("When you get to the Mayor's house, the door is wide open and you can see the blood stains on the floor,\n"
+          "there is a trail of blood leading from the door to under the stairs. As you investigate you can see the body\n"
+          "of the maid who seems to just barely hanging on to life.\n")
+    time.sleep(timeExtremelyLong)
+    print(f"{theHero.heroName}, come close, they took them, Riley and their father were taken by him.\n"
+          f"that terrible Orc called The Green Lean Ugly Machine! He took Riley, {theHero.heroName}!\n"
+          f"You have to go to his dungeon deep in the forest, you have to get Riley and their father back!")
+    print("GO! Don't worry about me, I'm already gone... *fades away*\n\n")
+    time.sleep(timeExtremelyLong)
+    sad_music_two.stop()
+    epic_music.play(loops=-1)
+    time.sleep(timeShort)
+    print(f"{theHero.heroName} had a quest ahead of them, to journey deep into the forest to the dungeon of that worst "
+          f"of creatures, the blood thirsty Orc, 'The Green Lean Ugly Machine'.")
+    print(f"No time to turn back now {theHero.heroName} had a big journey ahead of them!\n")
+    time.sleep(timeVeryLong)
+
+
+def UrgramEncounter():
+    battle_music_victory.stop()
+    epic_music.stop()
+    journey_music.stop()
+    sad_music.stop()
+    battle_music_two.stop()
+    journey_music.play(loops=-1)
+    print("On your way to find the beast responsible you come across a giant beast!")
+    print("The Giant Beast: I Urgram, BugBear Barbarian am Smash you!\n")
+    time.sleep(timeLong)
+    print("Foul Beast I shall end you!          select # 1")
+    print("Tell me about yourself.              select # 2\n")
+    answer = input()
+    if answer == "1":
+        UrgramBattle()
+    elif answer == "2":
+        UrgramTalk()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        UrgramEncounter()
+
+def UrgramTalk():
+    print("Urgram: me tell you about me?")
+    print("No, you just like G.L.U.M. only want Smash, no time for DREAM...\n")
+    time.sleep(timeLong)
+    print("What dream would a beast such as you have?       select # 1\n")
+    answer = input()
+    answer = answer.upper()
+    if answer == "1":
+        print("Beasts may dream, like you now sleep forever!\n")
+        time.sleep(timeShort)
+        UrgramBattle()
+    elif answer == "DREAM":
+        UrgramTalk_PT2()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        UrgramTalk()
+
+def UrgramTalk_PT2():
+    epic_music.stop()
+    sad_music.stop()
+    journey_music.stop()
+    sad_music.play(loops=-1)
+    print("Urgram: You ask Urgram about Urgram dream?...")
+    print("Urgram always love cooking, but not very good, G.L.U.M. find Urgram when little")
+    print("G.L.U.M tell Urgram made to smash, but Urgram not want to hurt")
+    print("These look like big strong hands, too big for cooking, made for smashing....\n")
+    time.sleep(timeExtremelyLong)
+    print("Big hands were made to cook big meals...                         select # 1")
+    print("You were born for destruction, that is the nature of a Bugbear   select # 2")
+    print("Cooking, Smashing, your fate is your own to make up              select # 3\n")
+    answer = input()
+    if answer == "1":
+        print("Urgram: Big hands were made for cook big meal?")
+        print("Urgram never though of that")
+        print("Maybe Urgram have time... to change\n")
+        time.sleep(timeLong)
+        print("Urgram wandered away into the distance...\n")
+        time.sleep(timeShort)
+        urgramFight.uTrust = True
+    elif answer == "2":
+        print("Maybe that be Urgram fate... Now you must meet end...\n")
+        UrgramBattle()
+    elif answer == "3":
+        print("Urgram: Urgram make Urgram fate?")
+        print("Urgram never though of that")
+        print("Maybe Urgram have time... to change\n")
+        time.sleep(timeLong)
+        print("Urgram wandered away into the distance...\n")
+        time.sleep(timeShort)
+        urgramFight.uTrust = True
+    else:
+        print("That does not seem to be an option, please try again\n")
+        UrgramTalk_PT2()
+
+
+def UrgramBattle():
+    epic_music.stop()
+    sad_music.stop()
+    journey_music.stop()
+    battle_music_two.stop()
+    battle_music_two.play(loops=-1)
+    if useItems.inspiringSong or useItems.magicCookie or useItems.magicElixir:
+        print("Shall you check your Inventory?")
+        print("Yes, check Inventory     select # 1")
+        print("Do not check Inventory   select # 2\n")
+        answer = input()
+        if answer == "1":
+            useItems.checkingItems = True
+            useItems.use()
+        elif answer == "2":
+            pass
+        else:
+            print("That does not seem to be an option, please try again\n")
+            UrgramBattle()
+    else:
+        pass
+    theCombat.enemyDeath = urgramFight.uDeath
+    theCombat.enemyName = urgramFight.uName
+    theCombat.enemyHP = urgramFight.uHP
+    theCombat.enemyDam = urgramFight.uDam
+    theCombat.enemyAttack = urgramFight.uAttack
+    time.sleep(timeShort)
+    theCombat.fighting = True
+    theCombat.battle()
+    print("The Bugbear Barbarian Urgram, falls to the ground defeated")
+    print("For will you take pity in such a simple minded creature, left with the only option to destroy it\n")
+    time.sleep(timeLong)
+
+
+def HuroHuroEncounter():
+    battle_music_victory.stop()
+    epic_music.stop()
+    journey_music.stop()
+    sad_music.stop()
+    battle_music_two.stop()
+    journey_music.play(loops=-1)
+    print("On your way, you hear the wind blow and leaves blowing")
+    print(f"A sudden strike in the back a small goblin {huroHuroFight.hhAttack}")
+    print(f"{theHero.heroName} takes {huroHuroFight.hhDam} damage\n")
+    theHero.currentHP -= huroHuroFight.hhDam
+    time.sleep(timeLong)
+    print("Small Goblin: Taste my sting, the deadly attack of Huro-Huro the Rogue")
+    print("That was just a bit of the pain you will face by at hands of me!\n")
+    print("*Prepare for battle*                             select # 1")
+    print("Cruel goblin You shall meet your end here!       select # 2")
+    print("Talk to Huro-Huro                                select # 3\n")
+    answer = input()
+    if answer == "1":
+        HuroHuroBattle()
+    elif answer == "2":
+        HuroHuroBattle()
+    elif answer == "3":
+        HuroHuroTalk()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        HuroHuroEncounter()
+
+def HuroHuroTalk():
+    print("Huro-Huro: I have no time to discuss methods of assassination to the likes of you")
+    print("Don't worry I will be quick. You shall meet your ends like my FAMILY did!\n")
+    print("You would dispatch of me just like you did to your own family?!      select # 1")
+    print("Such a wretched creature only deserves death!                        select # 2\n")
+    answer = input()
+    answer = answer.upper()
+    if answer == "1":
+        HuroHuroBattle()
+    elif answer == "2":
+        HuroHuroBattle()
+    elif answer == "FAMILY":
+        HuroHuroTalk_PT2()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        HuroHuroTalk()
+
+def HuroHuroTalk_PT2():
+    journey_music.stop()
+    sad_music.stop()
+    sad_music.play(loops=-1)
+    print("No I did not kill my family")
+    print("You see I come from Goblin Royalty from the Eastern Jungle")
+    print("My family was slain when I was a boy, I searched forever to find a clue to my families killer to no avail\n")
+    time.sleep(timeVeryLong)
+    print("G.L.U.M. told me he has a vital clue to this and will provide it to me after 3 years of service ")
+    print("You see to avenge my family I have to help G.L.U.M.\n")
+    time.sleep(timeLong)
+    print("A foolish quest, to help a fiend you will become a fiend                     select # 1")
+    print("There is another way, help me and we will get the finest detective on it     select # 2")
+    print("Death begets death, your family would not want you to live this way          select # 3\n")
+    answer = input()
+    if answer == "1":
+        print("Foolish to only to a fool, I shall avenge my family but fist I will slit your throat\n")
+        time.sleep(timeShort)
+        HuroHuroBattle()
+    elif answer == "2":
+        print("A fine detective.. Maybe with your help this could work...")
+        print("I will consider this...")
+        print("Huro-Huro vanishes into the shadows\n")
+        huroHuroFight.hhTrust = True
+        time.sleep(timeLong)
+    elif answer == "3":
+        print("Perhaps they would not want me to live this way...")
+        print("But what other choice do I have...")
+        print("Huro-Huro vanishes into the shadows\n")
+        time.sleep(timeLong)
+    else:
+        print("That does not seem to be an option, please try again\n")
+        HuroHuroTalk_PT2()
+
+
+def HuroHuroBattle():
+    epic_music.stop()
+    sad_music.stop()
+    journey_music.stop()
+    battle_music_two.stop()
+    battle_music_two.play(loops=-1)
+    if useItems.inspiringSong or useItems.magicCookie or useItems.magicElixir:
+        print("Shall you check your Inventory?")
+        print("Yes, check Inventory     select # 1")
+        print("Do not check Inventory   select # 2\n")
+        answer = input()
+        if answer == "1":
+            useItems.checkingItems = True
+            useItems.use()
+        elif answer == "2":
+            pass
+        else:
+            print("That does not seem to be an option, please try again\n")
+            UrgramBattle()
+    else:
+        pass
+    theCombat.enemyDeath = huroHuroFight.hhDeath
+    theCombat.enemyName = huroHuroFight.hhName
+    theCombat.enemyHP = huroHuroFight.hhHP
+    theCombat.enemyDam = huroHuroFight.hhDam
+    theCombat.enemyAttack = huroHuroFight.hhAttack
+    time.sleep(timeShort)
+    theCombat.fighting = True
+    theCombat.battle()
+    print("The Goblin Rogue lies defeated on the ground")
+    print("Such lowsome creatures, the Goblins. Only knowing theft and debauchery")
+    print("Will you take pity on one such as this, who sought out such destructive ways\n")
+    time.sleep(timeVeryLong)
+
+
+def RiilaEncounter():
+    battle_music_victory.stop()
+    epic_music.stop()
+    battle_music_two.stop()
+    journey_music.stop()
+    sad_music.stop()
+    journey_music.play(loops=-1)
+    print("Hooded figure: Stop where you are or you shall feel the sting of my arrows")
+    print("For I am Riila the Hobgoblin Ranger shall strike you down!\n")
+    time.sleep(timeLong)
+    print("*Draw your weapon and prepare for battle*            select # 1")
+    print("You stand in my way and I shall take you down!       select # 2")
+    print("Speak with Riila                                     select # 3\n")
+    answer = input()
+    if answer == "1":
+        RiilaBattle()
+    elif answer == "2":
+        RiilaBattle()
+    elif answer == "3":
+        RiilaTalk()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        RiilaEncounter()
+
+
+def RiilaTalk():
+    print("As you probably could have guessed, my place is not on the battlefield like many other Hobgoblins")
+    print("I have a LOVE for nature, and there is a special I wish to protect")
+    print("Following G.L.U.M.s orders is just a means to an end...\n")
+    time.sleep(timeVeryLong)
+    print("Following G.L.U.M. will bring you only to your end                                                   select # 1")
+    print("You claim to love nature, yet you kill to get what you want which makes you no better than G.L.U.M.  select # 2\n")
+    answer = input()
+    answer = answer.upper()
+    if answer == "1":
+        print("Oh and I'm guessing you will be the bringer of my end?\n")
+        time.sleep(timeShort)
+        RiilaBattle()
+    elif answer == "2":
+        print("Maybe no better, but whats the cost when the ends justify the means!\n")
+        time.sleep(timeShort)
+        RiilaBattle()
+    elif answer == "LOVE":
+        RiilaTalk_PT2()
+    else:
+        print("That does not seem to be an option, please try again\n")
+        RiilaTalk()
+
+
+def RiilaTalk_PT2():
+    journey_music.stop()
+    sad_music.stop()
+    sad_music.play(loops=-1)
+    print("I was considered an outcast of my people, a Hobgoblin who did not care for the ways of war and conquest")
+    print("G.L.U.M. found me and took me in, he told me he would buy my sacred forest to make it into\n "
+          "a while life conservation. Protected lands for nature for natures sake ")
+    print("This is my mission to protect what is sacred and beautiful\n")
+    time.sleep(timeExtremelyLong)
+    print("G.L.U.M. is using you! can't you see there is another way, join me!                  select # 1")
+    print("A noble cause, but to achieve such glory with blood shed invalidates such things     select # 2\n")
+    answer = input()
+    if answer == "1":
+        print("Join you... Maybe that is an option, you would show kindness to me after what pain we brought you?")
+        print("*Riila walks into a tree and vanishes* \n")
+        riilaFight.rTrust = True
+        time.sleep(timeLong)
+    elif answer == "2":
+        print("Protected lands bought with bloody money, does seem that the ends do not justify the means...")
+        print("*Riila walks into a tree and vanishes* \n")
+        time.sleep(timeLong)
+    else:
+        print("That does not seem to be an option, please try again\n")
+        RiilaTalk_PT2()
+
+def RiilaBattle():
+    epic_music.stop()
+    sad_music.stop()
+    journey_music.stop()
+    battle_music_two.stop()
+    battle_music_two.play(loops=-1)
+    if useItems.inspiringSong or useItems.magicCookie or useItems.magicElixir:
+        print("Shall you check your Inventory?")
+        print("Yes, check Inventory     select # 1")
+        print("Do not check Inventory   select # 2\n")
+        answer = input()
+        if answer == "1":
+            useItems.checkingItems = True
+            useItems.use()
+        elif answer == "2":
+            pass
+        else:
+            print("That does not seem to be an option, please try again\n")
+            UrgramBattle()
+    else:
+        pass
+    theCombat.enemyDeath = riilaFight.rDeath
+    theCombat.enemyName = riilaFight.rName
+    theCombat.enemyHP = riilaFight.rHP
+    theCombat.enemyDam = riilaFight.rDam
+    theCombat.enemyAttack = riilaFight.rAttack
+    time.sleep(timeShort)
+    theCombat.fighting = True
+    theCombat.battle()
+    print("Riila, the Hobgoblin Range has been trounced")
+    print("Hobgoblins are know for such of the ways of war, with armies and forces to rival kingdoms")
+    print("Will you take pity on such a creature slain so far away from his comrades\n")
+    time.sleep(timeVeryLong)
+
+
+def run_functions_in_random_order(*funcs):
+    functions = list(funcs)
+    random.shuffle(functions)
+    for func in functions:
+        func()
+
+
+def GLUMEncounter():
+    battle_music_victory.stop()
+    epic_music.stop()
+    journey_music.stop()
+    sad_music.stop()
+    battle_music_two.stop()
+    final_boss_music.play(loops=-1)
+    print("You finally make it to the cave of G.L.U.M. (The Green Lean Ugly Machine)")
+    print("You are only a few feet away from rescuing Riley and their father, the mayor\n")
+    time.sleep(timeLong)
+    print("You hear footsteps in the dark, coming closer.. Coming for you...\n")
+    time.sleep(timeShort)
+    if urgramFight.uTrust and huroHuroFight.hhTrust and riilaFight.rTrust:
+        print("G.L.U.M.: So you have turned my allies against me?!")
+        print("So this is your power, the power of words. but such things will not work on me!\n")
+        time.sleep(timeLong)
+        print("*G.L.U.M. uses a dagger and stabs out his ears*\n")
+        time.sleep(timeShort)
+        print("NOW THIS IS MY TIME AND YOU SHALL FALL BY MY HANDS!\n")
+        time.sleep(timeShort)
+        GLUMBattle()
+    elif urgramFight.uDeath and huroHuroFight.hhDeath and riilaFight.rDeath:
+        print("G.L.U.M.: So, you have killed my champions and now you expect to kill me too!?")
+        print("I never anticipated such resistance from such a small town ")
+        print("You are a hard bastard to put down, but I will be your end!\n")
+        time.sleep(timeVeryLong)
+        GLUMBattle()
+    else:
+        print(f"G.L.U.M.: So you are here.. {theHero.heroName}, have you come to meet your end by my hands?")
+        print("Only the Strong will succeed, you will meet your end by my hands!")
+        time.sleep(timeLong)
+        GLUMBattle()
+
+
+def GLUMBattle():
+    epic_music.stop()
+    sad_music.stop()
+    journey_music.stop()
+    battle_music_two.stop()
+    battle_music_three.stop()
+    final_boss_music.stop()
+    battle_music_three.play(loops=-1)
+    if useItems.inspiringSong or useItems.magicCookie or useItems.magicElixir:
+        print("Shall you check your Inventory?")
+        print("Yes, check Inventory     select # 1")
+        print("Do not check Inventory   select # 2\n")
+        answer = input()
+        if answer == "1":
+            useItems.checkingItems = True
+            useItems.use()
+        else:
+            pass
+    else:
+        pass
+    getAllies.bigTrust = bigDestinyFight.bigDTrust
+    getAllies.urgTrust = urgramFight.uTrust
+    getAllies.hurTrust = huroHuroFight.hhTrust
+    getAllies.riiTrust = riilaFight.rTrust
+    if getAllies.bigTrust or getAllies.urgTrust or getAllies.hurTrust or getAllies.riiTrust:
+        print("Shall you check your list of allies?")
+        print("Yes, check allies         select # 1")
+        print("No, do not check allies   select # 2\n")
+        answer = input()
+        if answer == "1":
+            getAllies.useTrust = True
+            getAllies.useAlliesTrust()
+        else:
+            pass
+    else:
+        pass
+    theCombat.enemyDeath = glumFight.gDeath
+    theCombat.enemyName = glumFight.gName
+    theCombat.enemyHP = glumFight.gHP
+    theCombat.enemyDam = glumFight.gDam
+    theCombat.enemyAttack = glumFight.gAttack
+    time.sleep(timeShort)
+    theCombat.fighting = True
+    theCombat.battle()
+    print("This is it you have take out every obstacle in they way ")
+    print("GLUM lies defeated by your hands")
+    print("Such a wicked creature has meet his wicked end...\n")
+    time.sleep(timeVeryLong)
+
+def Credits():
+    battle_music_victory.stop()
+    battle_music_two.stop()
+    battle_music_three.stop()
+    final_boss_music.stop()
+    print("You make to it Riley and their father, you have saved them and saved the day")
+    print("You all head back home to celebrate")
+    print("You all live happily ever after, until the next adventure..\n\n")
+    time.sleep(timeVeryLong)
+    credits_music.play(loops=-1)
+    print("Coding by - Matthew Swaney")
+    time.sleep(timeVeryShort)
+    print("Story by - Matthew Swaney\n")
+    time.sleep(timeShort)
+    print("Music from - Lufia II: Rise of the Sinistrals - SNES\n")
+    time.sleep(timeShort)
+    print("intro_song = 03 Start of the Journey")
+    time.sleep(timeVeryShort)
+    print("town_music = 04 Town")
+    time.sleep(timeVeryShort)
+    print("transition_song = 05 Light Slumber")
+    time.sleep(timeVeryShort)
+    print("journey_music = 06 The Earth")
+    time.sleep(timeVeryShort)
+    print("battle_music_victory = 09 Triumph")
+    time.sleep(timeVeryShort)
+    print("battle_music_two = 16 Battle #2")
+    time.sleep(timeVeryShort)
+    print("tavern_music = 20 Capsule Monster")
+    time.sleep(timeVeryShort)
+    print("sad_music = 26 Parting")
+    time.sleep(timeVeryShort)
+    print("credits_music = 30 Summer")
+    time.sleep(timeVeryShort)
+    print("epic_music = 34 Towering Mountain")
+    time.sleep(timeVeryShort)
+    print("final_boss_music = 46 Final Battle")
+    time.sleep(timeVeryShort)
+    print("battle_music_three = 48 Battle #3")
+    time.sleep(timeVeryShort)
+    print("failure_song = 49 Grief")
+    time.sleep(timeVeryShort)
+    print("bad_music = 54 Panic\n")
+    time.sleep(timeShort)
+    print("Music from - Illusion of Gaia - SNES\n\n")
+    time.sleep(timeShort)
+    print("fountain_music = 02b Lively City by the Sea")
+    time.sleep(timeVeryShort)
+    print("inspiring_song = 04 Lola-s Melody")
+    time.sleep(timeVeryShort)
+    print("home_music = 08 Blessing of Nature")
+    time.sleep(timeVeryShort)
+    print("sad_music_two = 13 Deep Sadness\n")
+    time.sleep(timeVeryShort)
+    print("Special thanks \n")
+    time.sleep(timeShort)
+    print("Rick Swaney - Motivation")
+    time.sleep(timeVeryShort)
+    print("Nicole Swaney - Motivation")
+    time.sleep(timeVeryShort)
+    print("Ean Kelly - Play Testing")
+    time.sleep(timeVeryShort)
+    print("Mark Swaney - Inspiration\n")
+    time.sleep(timeShort)
+    print("The End")
+    time.sleep(timeShort)
+
+startGame()
+
+run_functions_in_random_order(UrgramEncounter, HuroHuroEncounter, RiilaEncounter)
+
+GLUMEncounter()
+
+Credits()
