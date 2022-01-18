@@ -1,0 +1,399 @@
+
+class Sword():
+    self = False
+
+class Axe():
+    self = False
+
+class Crossbow():
+    self = False
+
+class LittleGirl():
+    self = False
+
+class VampireSaved():
+    self = False
+
+def gameOver():
+    print("\n GaveOver: you done fucked up and cant save your family or maybe you don't feel like it anymore")
+    print("\n Do you want to play again?")
+    answer = input("Select #1 to play again and 2# to quit: ")
+    if "1" in answer:
+        Sword.self = False
+        Axe.self = False
+        Crossbow.self = False
+        LittleGirl.self = False
+        VampireSaved.self = False
+        startGame()
+    else:
+        quit()
+
+def startGame():
+    print("\n")
+    print("You were partying all night long but you wake up today to notice something is missing, your family!") # setup
+    print("Your family was kidnapped by the Destiny Gang, and it is up to you now") # the story
+    print("Chose your weapon to take with you to rescue your family \n") # double check
+    print("Merciful Blade: A magic sword than can never deal any kind of lethal damage. "
+          "It appears sharp but can it cut? (select #1 for this choice)")
+    print("One Sided Guitar Axe: A powerful weapon for sure. "
+          "It is also be a deadly instrument of music in the right hands (select #2 for this choice)")
+    print("Crucifix Crossbow: The trusty crossbow good for hunting. "
+          "Also doubles as a Crucifix which can be handy against the undead or demonic (select #3 for this choice)")
+
+    answer = input("Please select 1 ,2 ,or 3: ")
+    if "1" in answer:
+        Sword.self = True
+        print("You take the Merciful Blade with you")
+    elif "2" in answer:
+        Axe.self = True
+        print("You take the Guitar Axe with you")
+    elif "3" in answer:
+        Crossbow.self = True
+        print("You take the Crucifix Crossbow with you")
+    elif "quit" in answer:
+        quit()
+    else:
+        print(" \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+        startGame()
+
+    print("you go on your way \n") # amp this up
+
+    obstacleOne()
+
+def obstacleOne():
+    print("\n you come across a carriage with a crying baby") # amp up
+    print("no one knows why this baby is crying") # amp up
+    if Sword.self == True:
+        print("Use the Merciful Blade to burp the baby (select #1)")
+        print("Use the Merciful Blade as a pacifier for the baby (select #2)")
+        answer = input("Please select 1 or 2: ")
+        if "1" in answer:
+            print("The baby burps and is happy now")
+            obstacleTwo()
+        elif "2" in answer:
+            print("The baby has your Merciful Blade now and you cannot rescue your family")
+            gameOver()
+        elif "quit" in answer:
+            quit()
+        else:
+            print(" \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+            obstacleOne()
+    elif Axe.self == True:
+        print("Chop the baby's head off with the Guitar Axe (select #1)")
+        print("Sooth the baby with a calming ballad with the Guitar Axe (select #2)")
+        answer = input("Please select 1 or 2: ")
+        if "1" in answer:
+            print("You chop the baby's head off it is no longer crying")
+            gameOver()
+        elif "2" in answer:
+            print("The baby stops being fussy and easily falls asleep")
+            obstacleTwo()
+        elif "quit" in answer:
+            quit()
+        else:
+            print(" \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+            obstacleOne()
+    else:
+        print("Give the Crucifix Crossbow to the baby to play with (select #1)")
+        print("Use the Crucifix Crossbow as a cross on the baby (select #2")
+        answer = input("Please select 1 or 2: ")
+        if "1" in answer:
+            print("The dastardly baby shoots the crossbow at his parents")
+            gameOver()
+        elif "2" in answer:
+            print("The baby was being disturbed by an evil spirit and you ward it off. "
+                  "The baby has calmed down and gone to sleep")
+            obstacleTwo()
+        elif "quit" in answer:
+            quit()
+        else:
+            print(" \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+            obstacleOne()
+
+def obstacleTwo():
+    print("\n You were on your way past the carriage and followed the road. "
+          "You made it to a impasse in the road and are stopped by a deadly armed Vampire")
+    print("You approach the Vampire, do you want to talk to him or just fight?")
+    answer = input("select #1 to talk or #2 to fight: ")
+    if "1" in answer:
+        print("Inquire about why he is stopping you (select #1)")
+        print("Tell him, he is gross and should just get a job (select #2)")
+        answer = input("Select #1 or #2: ")
+        if "1" in answer:
+            VampireSaved.self = True
+            print("The Vampire explains how his family was kidnapped by the Destiny Gang "
+                  "and that he has to work for them")
+            print("You tell the Vampire that you are going to the Destiny Gang for the same reason")
+            print("The Vampire lets you pass")
+            obstacleThree()
+        elif "2" in answer:
+            print("The Vampire is not amused and sucks your blood")
+            gameOver()
+        elif "quit" in answer:
+            quit()
+        else:
+            print(" \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+            obstacleTwo()
+    elif "2" in answer:
+        if Sword.self == True:
+            print("Attack with the Merciful Blade furiously (select #1)")
+            print("Stab the Vampire in the heart with the Merciful Blade (select #2)")
+            answer = input("Please select #1 or #2: ")
+            if "1" in answer:
+                print("The magic weapon Merciful Blade, "
+                      "weakens the Vampire greatly and he runs away bruised up and crying")
+                obstacleThree()
+            elif "2" in answer:
+                print("You cannot stab with the Merciful Blade, it appears sharp but does not pierce, you get beat up")
+                gameOver()
+            elif "quit" in answer:
+                quit()
+            else:
+                print(
+                    " \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+                obstacleTwo()
+        elif Axe.self == True:
+            print("Chop his head off with the Guitar Axe(select #1)")
+            print("Play music with the Guitar Axe (select #2)")
+            answer = input("Please select #1 or #2: ")
+            if "1" in answer:
+                print("You chop the head off the Vampire and he walks away with his head upset")
+                obstacleThree()
+            elif "2" in answer:
+                print("You play a funky tune and the Vampire dances and enjoys your music then lets you pass")
+                obstacleThree()
+            elif "quit" in answer:
+                quit()
+            else:
+                print(
+                    " \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+                obstacleTwo()
+        else:
+            print("Shoot the Vampire with the Crucifix Crossbow (select #1)")
+            print("Use the Crucifix Crossbow as a cross (select #2)")
+            answer = input("Please select #1 or #2: ")
+            if "1" in answer:
+                print("You shoot the Vampire in the heart and he turns to dust")
+                obstacleThree()
+            elif "2" in answer:
+                print("You use the cross and he turns into gas and flees")
+                obstacleThree()
+            elif "quit" in answer:
+                quit()
+            else:
+                print(
+                    " \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+                obstacleTwo()
+    elif "quit" in answer:
+        quit()
+    else:
+        print(" \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+        obstacleTwo()
+
+def obstacleThree(): # the trick
+    print("\n On your mary way you come across a little girl who is all alone in the woods")
+    print("Save the little girl, take her with you (select #1)")
+    print("Exterminate the little girl (select #2)")
+    answer = input("Please select #1 or #2: ")
+    if "1" in answer:
+        LittleGirl.self = True
+        print("The little girl looks cheerful and happily goes with out")
+        theBoss()
+    elif "2" in answer:
+        if Sword.self == True:
+            print("The little girl pulls out a knife")
+            print("Knock the knife out of her hands with the Merciful Blade (select #1)")
+            print("Go for a strike to the neck of her, take out her breathing quickly (select #2)")
+            answer = input("Please select #1 or #2 or #3: ")
+            if "1" in answer:
+                print("She is too quick for you and dodges your attempt to disarm her")
+                print("She chuckles to herself 'Oh you must not know who i am, I'm am one of the most deadly assassin"
+                      "in the world. The Destiny Gang knows how motivated a father can be when it comes to his family'")
+                print("It's time for me to end this")
+                print("She appears behind you and slits your neck")
+                print("As everything goes black you hear her sinister laugh one last time")
+                gameOver()
+            elif "2" in answer:
+                print("She is too quick for you and dodges your attempt her neck")
+                print("She chuckles to herself 'Oh you must not know who i am, I'm am one of the most deadly assassin"
+                      "in the world. The Destiny Gang knows how motivated a father can be when it comes to his family'")
+                print("It's time for me to end this")
+                print("She appears behind you and slits your neck")
+                print("As everything goes black you hear her sinister laugh one last time")
+                gameOver()
+            elif "quit" in answer:
+                quit()
+            elif "3" in answer:
+                print("Awe yes there is always a hidden option, Pocket Sand!")
+                print("The Evil little girl 'My eyes, my only weakness!' Now while she is blinded")
+                print("You expertly, take her out with the Merciful Blade, "
+                      "the power of the nonlethal weapon was too much and she is defeated ")
+                theBoss()
+            else:
+                print(
+                    " \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+                obstacleThree()
+        elif Axe.self == True:
+            print("The little girl pulls out a knife")
+            print("Knock the knife out of her hands with the Guitar Axe (select #1)")
+            print("Play the 'Melody of the Damned' and send her to Hell (select #2)")
+            answer = input("Please select #1 or #2 or #3: ")
+            if "1" in answer:
+                print("She is too quick for you and dodges your attempt to disarm her")
+                print("She chuckles to herself 'Oh you must not know who i am, I'm am one of the most deadly assassin"
+                      "in the world. The Destiny Gang knows how motivated a father can be when it comes to his family'")
+                print("It's time for me to end this")
+                print("She appears behind you and slits your neck")
+                print("As everything goes black you hear her sinister laugh one last time")
+                gameOver()
+            elif "2" in answer:
+                print("Just as you begin to play she puts in ear plugs ")
+                print("She chuckles to herself 'Oh you must not know who i am, I'm am one of the most deadly assassin"
+                      "in the world. The Destiny Gang knows how motivated a father can be when it comes to his family'")
+                print("It's time for me to end this")
+                print("She appears behind you and slits your neck")
+                print("As everything goes black you hear her sinister laugh one last time")
+                gameOver()
+            elif "quit" in answer:
+                quit()
+            elif "3" in answer:
+                print("Awe yes there is always a hidden option, Pocket Sand!")
+                print("The Evil little girl 'My eyes, my only weakness!' Now while she is blinded")
+                print("You expertly, take her out with the Guitar Axe, "
+                      "the power of the axe was too much and you chop her head off ")
+                theBoss()
+            else:
+                print(
+                    " \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+                obstacleThree()
+        else:
+            print("The little girl pulls out a knife")
+            print("Knock the knife out of her hands with the Crucifix Crossbow bolts (select #1)")
+            print("Use the Crucifix Crossbow as a cross, she may be possessed (select #2)")
+            answer = input("Please select #1 or #2 or #3: ")
+            if "1" in answer:
+                print("She is too quick for you and dodges your attempt to disarm her")
+                print("She chuckles to herself 'Oh you must not know who i am, I'm am one of the most deadly assassin"
+                      "in the world. The Destiny Gang knows how motivated a father can be when it comes to his family'")
+                print("It's time for me to end this")
+                print("She appears behind you and slits your neck")
+                print("As everything goes black you hear her sinister laugh one last time")
+                gameOver()
+            elif "2" in answer:
+                print("The cross has no effect on the evil little girl")
+                print("She chuckles to herself 'Oh you must not know who i am, I'm am one of the most deadly assassin"
+                      "in the world. The Destiny Gang knows how motivated a father can be when it comes to his family'")
+                print("It's time for me to end this")
+                print("She appears behind you and slits your neck")
+                print("As everything goes black you hear her sinister laugh one last time")
+                gameOver()
+            elif "quit" in answer:
+                quit()
+            elif "3" in answer:
+                print("Awe yes there is always a hidden option, Pocket Sand!")
+                print("The Evil little girl 'My eyes, my only weakness!' Now while she is blinded")
+                print("You expertly, take her out with the Crucifix Crossbow, "
+                      "the swift power of the crossbow's many bolts were too much and lays perforated on the ground ")
+                theBoss()
+            else:
+                print(
+                    " \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+                obstacleThree()
+    elif "quit" in answer:
+        quit()
+    else:
+        print(" \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+        obstacleThree()
+
+def theBoss():
+    print("\n You finally make it to the hideout of the Destiny Gang")
+    print("You are approached by the Destiny Gang's leader Big Destiny")
+    print("So Mark, you have made it this far and now it is time for us to fight to the death")
+    if LittleGirl.self == True:
+        print("The little girl says 'It's time for me to end this'")
+        print("She appears behind you and slits your neck")
+        print("As everything goes black you hear her sinister laugh one last time")
+        gameOver()
+    else:
+        if Sword.self == True:
+            print("Try to intimidate Big Destiny (select #1)")
+            print("Use the Merciful Blade to beat up Big Destiny (select #2)")
+            answer = input("Please select #1 or #2: ")
+            if "1" in answer:
+                print("He tests your blade and discovers it cannot cut he, and then Big Destiny stabs you in the guts")
+                gameOver()
+            elif "2" in answer:
+                print("You swing the Merciful Blade but it does not seem to cut, "
+                      "so you beat his head in until Big Destiny is unconscious")
+                theEnding()
+            elif "quit" in answer:
+                quit()
+            else:
+                print(
+                    " \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+                theBoss()
+        elif Axe.self == True:
+            print("Use the Guitar Axe to play music and overcome Big Destiny with the power of 'Gettin' Down'"
+                  "(select #1)")
+            print("Use the Guitar Axe to cleave Big Destiny in half (select #2)")
+            answer = input("Please select #1 or #2: ")
+            if "1" in answer:
+                print("You play some funky tunes and Big D jams out and invites you to join him")
+                gameOver()
+            elif "2" in answer:
+                print("You successfully cleave Big D in half with the Guitar Axe")
+                theEnding()
+        else:
+            print("Use the Crucifix Crossbow like a cross, he may be possessed (select #1)")
+            print("Use the Crucifix Crossbow to shoot Big Destiny full of bolts (select #2")
+            answer = input("Please select #1 or #2: ")
+            if "1" in answer:
+                print("Big D is not a vampire nor possessed, he beats the crap outta you")
+                gameOver()
+            elif "2" in answer:
+                print("You unleash your Crucifix Crossbow bolts and shoot Big D in the face and he goes down")
+                theEnding()
+            elif "quit" in answer:
+                quit()
+            else:
+                print(
+                    " \n You need to select an option from the listed given examples, or type 'quit' to exit the game")
+                theBoss()
+
+def theEnding():
+    print("\n You find your family all tied up and scared")
+    print("You undo their bonds and take them home")
+    if VampireSaved.self == True:
+        print("You meet up with the Vampire, his family, and the Baby, and his parents after you make it home")
+        print("The lot of you party it up and rejoice on the day being saved and everyone is happy")
+        print("You all party hard for no one know what adventure awaits you for tomorrow")
+        print("\n The End")
+        print("\n Do you want to play again?")
+        answer = input("Select #1 to play again and 2# to quit: ")
+        if "1" in answer:
+            Sword.self = False
+            Axe.self = False
+            Crossbow.self = False
+            LittleGirl.self = False
+            VampireSaved.self = False
+            startGame()
+        else:
+            quit()
+    else:
+        print("You party it up with you newly rescued family and friends")
+        print("The lot of you party it up and rejoice on the day being saved and everyone is happy")
+        print("You all party hard for no one know what adventure awaits you for tomorrow")
+        print("\n The End")
+        print("\n Do you want to play again?")
+        answer = input("Select #1 to play again and 2# to quit: ")
+        if "1" in answer:
+            Sword.self = False
+            Axe.self = False
+            Crossbow.self = False
+            LittleGirl.self = False
+            VampireSaved.self = False
+            startGame()
+        else:
+            quit()
+
+startGame()
