@@ -193,10 +193,10 @@ class Combat():
                         print(f"{self.enemyName} attacks, {self.enemyAttack}, {self.enemyDam} damage was done")
                         theHero.currentHP = theHero.currentHP - self.enemyDam
                         print(f"{theHero.heroName} current HP: {theHero.currentHP}\n")
-            elif theHero.currentHP <= 1:
-                print(f"{theHero.heroName} failed in his fight against Big Destiny\n")
+            elif theHero.currentHP <= 0:
+                print(f"{theHero.heroName} failed in his fight against {self.enemyName}\n")
                 gameOver()
-            elif self.enemyHP <= 1:
+            elif self.enemyHP <= 0:
                 battle_music_two.stop()
                 battle_music_three.stop()
                 self.enemyDeath = True
@@ -542,6 +542,111 @@ class Allies():
                     self.riiTrust = False
                     theHero.currentDam += 4
                 elif answer == "2":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust and self.urgTrust is False and self.hurTrust is False and self.riiTrust:
+                print("Use Big D's help             select # 1")
+                print("use Riila's help             select # 2")
+                print("Exit Inventory               select # 3\n")
+                answer = input()
+                if answer == "1":
+                    print("Big Destiny appears and strikes GLUM for 6 damage!\n")
+                    self.bigTrust = False
+                    glumFight.gHP -= 6
+                elif answer == "2":
+                    print("Riila appears to cheer you on, you feel more powerful!\n")
+                    self.riiTrust = False
+                    theHero.currentDam += 4
+                elif answer == "3":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust and self.urgTrust is False and self.hurTrust and self.riiTrust:
+                print("Use Big D's help             select # 1")
+                print("use Huro-Huro's help         select # 2")
+                print("use Riila's help             select # 3")
+                print("Exit Inventory               select # 4\n")
+                answer = input()
+                if answer == "1":
+                    print("Big Destiny appears and strikes GLUM for 6 damage!\n")
+                    self.bigTrust = False
+                    glumFight.gHP -= 6
+                elif answer == "2":
+                    print("Huro-Huro appears to cheer you on, you deal a deadly blow to GLUM!\n")
+                    self.hurTrust = False
+                    glumFight.gHP -= theHero.weapCrit
+                elif answer == "3":
+                    print("Riila appears to cheer you on, you feel more powerful!\n")
+                    self.riiTrust = False
+                    theHero.currentDam += 4
+                elif answer == "4":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust and self.urgTrust and self.hurTrust is False and self.riiTrust:
+                print("Use Big D's help             select # 1")
+                print("Use Urgram's help            select # 2")
+                print("use Riila's help             select # 3")
+                print("Exit Inventory               select # 4\n")
+                answer = input()
+                if answer == "1":
+                    print("Big Destiny appears and strikes GLUM for 6 damage!\n")
+                    self.bigTrust = False
+                    glumFight.gHP -= 6
+                elif answer == "2":
+                    print("Urgram appears to cheer your on with some cooked meat, you feel more healthy!\n")
+                    self.urgTrust = False
+                    theHero.currentHP += 8
+                elif answer == "3":
+                    print("Riila appears to cheer you on, you feel more powerful!\n")
+                    self.riiTrust = False
+                    theHero.currentDam += 4
+                elif answer == "4":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust and self.urgTrust is False and self.hurTrust and self.riiTrust is False:
+                print("Use Big D's help             select # 1")
+                print("use Huro-Huro's help         select # 2")
+                print("Exit Inventory               select # 3\n")
+                answer = input()
+                if answer == "1":
+                    print("Big Destiny appears and strikes GLUM for 6 damage!\n")
+                    self.bigTrust = False
+                    glumFight.gHP -= 6
+                elif answer == "2":
+                    print("Huro-Huro appears to cheer you on, you deal a deadly blow to GLUM!\n")
+                    self.hurTrust = False
+                    glumFight.gHP -= theHero.weapCrit
+                elif answer == "3":
+                    print("You do not want help from any allies\n")
+                    time.sleep(timeShort)
+                    self.useTrust = False
+                else:
+                    print("That option does not seem to be available, please try again\n")
+            elif self.bigTrust is False and self.urgTrust and self.hurTrust is False and self.riiTrust:
+                print("Use Urgram's help            select # 1")
+                print("use Riila's help             select # 2")
+                print("Exit Inventory               select # 3\n")
+                answer = input()
+                if answer == "1":
+                    print("Urgram appears to cheer your on with some cooked meat, you feel more healthy!\n")
+                    self.urgTrust = False
+                    theHero.currentHP += 8
+                elif answer == "2":
+                    print("Riila appears to cheer you on, you feel more powerful!\n")
+                    self.riiTrust = False
+                    theHero.currentDam += 4
+                elif answer == "3":
                     print("You do not want help from any allies\n")
                     time.sleep(timeShort)
                     self.useTrust = False
