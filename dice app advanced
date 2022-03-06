@@ -1,0 +1,308 @@
+import random
+
+def exit():
+    print("Thanks for Rolling!")
+    quit()
+
+def advantage():
+    val1 = random.randint(1,20)
+    val2 = random.randint(1,20)
+    print(f"Roll 1: {val1}")
+    print(f"Roll 2: {val2}")
+    if val1 >= val2:
+        print(f"Advantage roll: {val1}")
+    else:
+        print(f"Advantage roll: {val2}")
+    print("\n")
+    print("Roll again           #1")
+    print("Back to the menu     #2")
+    print("Exit/Quit            #3")
+    answer = input()
+    if answer == "2":
+        start()
+    elif answer == "3":
+        exit()
+    else:
+        advantage()
+
+
+
+def disadvantage():
+    dval1 = random.randint(1,20)
+    dval2 = random.randint(1,20)
+    print(f"Roll 1: {dval1}")
+    print(f"Roll 2: {dval2}")
+    if dval1 <= dval2:
+        print(f"Disadvantage roll: {dval1}")
+    else:
+        print(f"Disadvantage roll: {dval2}")
+    print("\n")
+    print("Roll again           #1")
+    print("Back to the menu     #2")
+    print("Exit/Quit            #3")
+    answer = input()
+    if answer == "2":
+        start()
+    elif answer == "3":
+        exit()
+    else:
+        disadvantage()
+
+
+
+def hard_char():
+    rolls = 3
+    sides = 6
+    total = 0
+
+    print("Hard Character Creation")
+    for x in range(rolls):
+        roll = random.randint(1, sides)
+        total += roll
+        print(x + 1, ": ", roll)
+    print("Total: ", total)
+    print("\n")
+    print("Roll again               #1")
+    print("Back to the menu         #2")
+    print("Back to character menu   #3")
+    print("Exit/Quit                #4")
+    answer = input()
+    if answer == "2":
+        start()
+    elif answer == "3":
+        char_creation()
+    elif answer == "4":
+        exit()
+    else:
+        hard_char()
+
+
+
+def normal_char():
+    rolls = 4
+    sides = 6
+    total = 0
+    list = []
+
+    print("Normal Character Creation")
+    for x in range(rolls):
+        roll = random.randint(1, sides)
+        total += roll
+        print(x + 1, ": ", roll)
+        list.append(roll)
+    print(f"Lowest roll: {min(list)}")
+    total -= min(list)
+    print("Total: ", total)
+    print("\n")
+    print("Roll again               #1")
+    print("Back to the menu         #2")
+    print("Back to character menu   #3")
+    print("Exit/Quit                #4")
+    answer = input()
+    if answer == "2":
+        start()
+    elif answer == "3":
+        char_creation()
+    elif answer == "4":
+        exit()
+    else:
+        normal_char()
+
+
+
+def easy_char():
+    rolls = 5
+    sides = 6
+    total = 0
+    list = []
+
+    print("Easy Character Creation")
+    for x in range(rolls):
+        roll = random.randint(1, sides)
+        total += roll
+        print(x + 1, ": ", roll)
+        list.append(roll)
+    list.sort()
+    print(f"Lowest roll: {list[0]}")
+    print(f"Second lowest roll: {list[1]}")
+    total -= list[0]
+    total -= list[1]
+    print("Total: ", total)
+    print("\n")
+    print("Roll again               #1")
+    print("Back to the menu         #2")
+    print("Back to character menu   #3")
+    print("Exit/Quit                #4")
+    answer = input()
+    if answer == "2":
+        start()
+    elif answer == "3":
+        char_creation()
+    elif answer == "4":
+        exit()
+    else:
+        easy_char()
+
+def normal_dice():
+    running = True
+
+    while running:
+        rolls = "a"
+        sides = "a"
+        mod = "a"
+        total = 0
+
+        while sides.isnumeric() == False:
+            sides = input("How many sides does this die have? ")
+            if sides.isnumeric() == False:
+                print("You must enter a number, please")
+                continue
+            if int(sides) < 2:
+                print("You must have at least 2 sides")
+                sides = "a"
+        sides = int(sides)
+
+        while rolls.isnumeric() == False:
+            rolls = input("How many times will you roll this die? ")
+            if rolls.isnumeric() == False:
+                print("You must enter a number, please")
+                continue
+            if int(rolls) < 1:
+                print("You must roll the die at least once")
+                rolls = "a"
+        rolls = int(rolls)
+
+        while mod.strip("-").isnumeric() == False:
+            mod = input("What is your modifier for this die? ")
+            if mod.strip("-").isnumeric() == False:
+                print("You must enter a number, please")
+                continue
+        mod = int(mod)
+
+        for x in range(rolls):
+            roll = random.randint(1, sides)
+            total += roll
+            print(x + 1, ": ", roll)
+        print("Total: ", total)
+        print("Your modifier: ", mod)
+        print("Modified Total: ", total + mod)
+        print("\n")
+
+        roll_again = input("Roll again? (Y/N) : ")
+        if roll_again.upper() == "N":
+            running = False
+        print("\n")
+
+    print("Go to main menu          #1")
+    print("Exit/Quit                #2")
+    answer = input()
+    if answer == "2":
+        exit()
+    else:
+        start()
+
+
+def explode_dice():
+    running = True
+
+    while running:
+        rolls = "a"
+        sides = "a"
+        mod = "a"
+        total = 0
+
+        while sides.isnumeric() == False:
+            sides = input("How many sides does this die have? ")
+            if sides.isnumeric() == False:
+                print("You must enter a number, please")
+                continue
+            if int(sides) < 2:
+                print("You must have at least 2 sides")
+                sides = "a"
+        sides = int(sides)
+
+        while rolls.isnumeric() == False:
+            rolls = input("How many times will you roll this die? ")
+            if rolls.isnumeric() == False:
+                print("You must enter a number, please")
+                continue
+            if int(rolls) < 1:
+                print("You must roll the die at least once")
+                rolls = "a"
+        rolls = int(rolls)
+
+        while mod.strip("-").isnumeric() == False:
+            mod = input("What is your modifier for this die? ")
+            if mod.strip("-").isnumeric() == False:
+                print("You must enter a number, please")
+                continue
+        mod = int(mod)
+
+        while rolls:
+            for x in range(rolls):
+                roll = random.randint(1, sides)
+                total += roll
+                print(x + 1, ": ", roll)
+                if roll != sides:
+                    rolls -= 1
+            print("Total: ", total)
+        print("Your modifier: ", mod)
+        print("Modified Total: ", total + mod)
+        print("\n")
+
+        roll_again = input("Roll again? (Y/N) : ")
+        if roll_again.upper() == "N":
+            running = False
+        print("\n")
+
+    print("Go to main menu          #1")
+    print("Exit/Quit                #2")
+    answer = input()
+    if answer == "2":
+        exit()
+    else:
+        start()
+
+
+def char_creation():
+    print("Easy Character Creation rolls        #1")
+    print("Normal Character Creation rolls      #2")
+    print("Hard Character Creation rolls        #3")
+    print("Exit/Quit                            #4")
+    answer = input()
+    if answer == "1":
+        easy_char()
+    elif answer == "2":
+        normal_char()
+    elif answer == "3":
+        hard_char()
+    elif answer == "4":
+        exit()
+    else:
+        char_creation()
+
+def start():
+    print("Welcome to the D&D dice app")
+    print("Roll Advantage               #1")
+    print("Roll Disadvantage            #2")
+    print("Roll Character Creation      #3")
+    print("Roll Normal dice             #4")
+    print("Roll dice with Explosion     #5")
+    print("Exit/Quit                    #6")
+    answer = input()
+    if answer == "1":
+        advantage()
+    elif answer == "2":
+        disadvantage()
+    elif answer == "3":
+        char_creation()
+    elif answer == "4":
+        normal_dice()
+    elif answer == "5":
+        explode_dice()
+    elif answer == "6":
+        exit()
+    else:
+        start()
+
+start()
