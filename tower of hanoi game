@@ -1,0 +1,63 @@
+
+run = True
+source = ["large", "medium", "small"]
+destination = []
+auxiliary = []
+
+while run:
+    from_peg = source
+    to_peg = destination
+    question_one = True
+    question_two = True
+
+    if destination == ["large", "medium", "small"]:
+        print("Congratulations! You have beaten the Tower of Hanoi!")
+        run = False
+
+    while question_one:
+        print("From Source Peg:         #1")
+        print("From Auxiliary Peg:      #2")
+        print("From Destination Peg:    #3")
+        answer = input()
+        if answer == "1":
+            from_peg = source
+            question_one = False
+        elif answer == "2":
+            from_peg = auxiliary
+            question_one = False
+        elif answer == "3":
+            from_peg = destination
+            question_one = False
+        else:
+            print("Please choose and answer between 1-3, for selected peg")
+
+    while question_two:
+        print("To Source Peg:         #1")
+        print("To Auxiliary Peg:      #2")
+        print("To Destination Peg:    #3")
+        answer = input()
+        if answer == "1":
+            to_peg = source
+            question_two = False
+        elif answer == "2":
+            to_peg = auxiliary
+            question_two = False
+        elif answer == "3":
+            to_peg = destination
+            question_two = False
+        else:
+            print("Please choose and answer between 1-3, for sending peg")
+
+    popped_item = from_peg.pop()
+    to_peg.append(popped_item)
+
+    if to_peg != sorted(to_peg):
+        print("You cannot put a larger disk on top of a smaller disk")
+        popped_item = to_peg.pop()
+        from_peg.append(popped_item)
+
+    print("\n")
+    print(f"Source Peg: {source}")
+    print(f"Auxiliary Peg: {auxiliary}")
+    print(f"Destination Peg: {destination}")
+    print("\n")
